@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>中国文化常识学习平台 - v1.3</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+            --premium-color: #f39c12;
+            --border-radius: 8px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            background: var(--secondary-color);
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        .logo h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            flex: 1;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        
+        .action-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .action-btn.premium {
+            background: var(--premium-color);
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        
+        .search-container {
+            width: 100%;
+            position: relative;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .search-box:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+        
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-top: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+        
+        .search-results.active {
+            display: block;
+        }
+        
+        .result-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .result-item:hover {
+            background: #f0f7ff;
+        }
+        
+        .result-icon {
+            margin-right: 8px;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+        }
+        
+        .result-content {
+            flex: 1;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+        }
+        
+        .result-desc {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 3px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .result-tag {
+            background: #e3f2fd;
+            color: var(--primary-color);
+            padding: 2px 6px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            margin-top: 3px;
+            display: inline-block;
+        }
+        
+        .no-results {
+            padding: 15px;
+            text-align: center;
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 15px;
+            height: fit-content;
+        }
+        
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .section-title h2 {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+        }
+        
+        .section-list {
+            list-style: none;
+        }
+        
+        .section-item {
+            margin-bottom: 8px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-header {
+            background: var(--light-color);
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .section-header:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .section-header.active {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .section-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+        
+        .section-icon {
+            font-size: 1.1rem;
+        }
+        
+        .topic-list {
+            list-style: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: #f9f9f9;
+        }
+        
+        .section-item.active .topic-list {
+            max-height: 1000px;
+        }
+        
+        .topic-item {
+            padding: 8px 12px 8px 35px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .topic-item:hover {
+            background: #e3f2fd;
+            color: var(--primary-color);
+        }
+        
+        .topic-item.active {
+            background: #e3f2fd;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .content-header {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .current-topic {
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .knowledge-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 15px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .knowledge-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 5px;
+        }
+        
+        .knowledge-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .knowledge-item {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 12px 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .knowledge-item:hover {
+            background: #e3f2fd;
+            transform: translateX(3px);
+        }
+        
+        .knowledge-title {
+            font-weight: 600;
+            color: #27ae60;
+            font-size: 1rem;
+        }
+        
+        .media-badge {
+            background: #e3f2fd;
+            color: var(--primary-color);
+            padding: 2px 8px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 90%;
+            max-width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            color: #777;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 10;
+            background: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .modal-close:hover {
+            color: var(--accent-color);
+            transform: rotate(90deg);
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .modal-body {
+            line-height: 1.7;
+            color: #555;
+            font-size: 0.95rem;
+        }
+        
+        .modal-body img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--border-radius);
+            margin: 12px 0;
+            display: block;
+        }
+        
+        .modal-body iframe {
+            width: 100%;
+            height: 200px;
+            border: none;
+            border-radius: var(--border-radius);
+            margin: 12px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            font-size: 0.85rem;
+        }
+        
+        th, td {
+            padding: 8px 10px;
+            text-align: left;
+            border: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background-color: #f5f7fa;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+        
+        .modal-body p {
+            text-indent: 2em;
+            margin-bottom: 0.8em;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px 15px;
+            color: #777;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #ddd;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+        }
+        
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .media-item {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .media-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .media-item iframe {
+            width: 100%;
+            height: 120px;
+            border: none;
+        }
+        
+        .media-caption {
+            text-align: center;
+            padding: 5px;
+            font-size: 0.8rem;
+            color: #666;
+            background: #f9f9f9;
+        }
+        
+        .modal-body strong {
+            color: #d35400;
+            font-weight: 700;
+        }
+        
+        .knowledge-content strong {
+            color: #d35400;
+            font-weight: 700;
+        }
+        
+        .mobile-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            gap: 8px;
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 10px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .nav-btn i {
+            font-size: 1.1rem;
+        }
+        
+        .nav-btn.prev {
+            background: #7f8c8d;
+        }
+        
+        .nav-btn.next {
+            background: var(--success-color);
+        }
+        
+        .data-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .data-btn {
+            padding: 8px 12px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .data-btn.import {
+            background: #27ae60;
+        }
+        
+        .data-btn.export {
+            background: #3498db;
+        }
+        
+        @media (min-width: 768px) {
+            .mobile-nav {
+                display: none;
+            }
+            
+            .container {
+                max-width: 768px;
+                margin: 0 auto;
+            }
+        }
+        
+        .table-align-left td, .table-align-left th { text-align: left; }
+        .table-align-center td, .table-align-center th { text-align: center; }
+        .table-align-right td, .table-align-right th { text-align: right; }
+        .table-valign-top td, .table-valign-top th {vertical-align: top; }
+        
+        .data-tip {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .data-tip h4 {
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+        }
+        
+        .qr-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .qr-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            max-width: 90%;
+            width: 300px;
+        }
+        
+        .qr-title {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        #qrcode {
+            margin: 0 auto 15px;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .close-qr {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 8px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        #installBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            padding: 10px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .actions {
+                flex-direction: column;
+            }
+        }
+        
+        .paywall {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+        
+        .paywall-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .paywall-title {
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+        
+        .paywall-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #444;
+        }
+        
+        .premium-badge {
+            background: var(--premium-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .payment-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 25px 0;
+            flex-wrap: wrap;
+        }
+        
+        .payment-option {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            width: 130px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid #eee;
+        }
+        
+        .payment-option:hover {
+            border-color: var(--primary-color);
+        }
+        
+        .payment-option.active {
+            border-color: var(--success-color);
+            background: #e8f5e9;
+        }
+        
+        .payment-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .wechat .payment-icon {
+            color: #2aae67;
+        }
+        
+        .alipay .payment-icon {
+            color: #1677ff;
+        }
+        
+        .payment-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .payment-qrcode {
+            margin: 20px auto;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        
+        .payment-qrcode img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        .payment-instruction {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .activate-section {
+            margin-top: 20px;
+        }
+        
+        .activate-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+        
+        .activate-btn {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .activate-btn:hover {
+            background: #27ae60;
+        }
+        
+        .trial-info {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        .trial-countdown {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.2rem;
+            margin: 5px 0;
+        }
+        
+        .update-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--premium-color);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .update-banner.show {
+            transform: translateY(0);
+        }
+        
+        .update-text {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+        
+        .update-btn {
+            background: white;
+            color: var(--premium-color);
+            border: none;
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .version-badge {
+            background: var(--premium-color);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+        
+        /* 支付状态样式 */
+        .payment-status {
+            text-align: center;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+        }
+        
+        .payment-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .payment-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .payment-status.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* 订单历史 */
+        .order-history {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+            padding: 10px;
+        }
+        
+        .order-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .order-id {
+            font-weight: 600;
+        }
+        
+        .order-status {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <!-- 更新提示 -->
+    <div class="update-banner" id="updateBanner">
+        <div class="update-text">有新版本可用，点击刷新获取最新内容</div>
+        <button class="update-btn" id="refreshBtn">立即更新</button>
+    </div>
+    
+    <!-- 付费墙 -->
+    <div class="paywall" id="paywall">
+        <div class="paywall-content">
+            <h2 class="paywall-title">升级到正式版</h2>
+            <div class="premium-badge">解锁全部功能</div>
+            
+            <div class="trial-info" id="trialInfo">
+                <p>您的免费试用期还剩 <span class="trial-countdown" id="trialCountdown">7天</span></p>
+                <p>试用期结束后将无法访问全部内容</p>
+            </div>
+            
+            <div class="paywall-subtitle">支付 <strong>30元</strong> 解锁永久正式版</div>
+            
+            <div class="payment-options">
+                <div class="payment-option wechat active" data-payment="wechat">
+                    <div class="payment-icon">
+                        <i class="fab fa-weixin"></i>
+                    </div>
+                    <div class="payment-name">微信支付</div>
+                </div>
+                <div class="payment-option alipay" data-payment="alipay">
+                    <div class="payment-icon">
+                        <i class="fab fa-alipay"></i>
+                    </div>
+                    <div class="payment-name">支付宝</div>
+                </div>
+            </div>
+            
+            <div class="payment-qrcode" id="paymentQrcode">
+                <img src="https://via.placeholder.com/180x180?text=微信收款码" alt="微信收款码">
+            </div>
+            
+            <div class="payment-instruction">
+                <p>请使用微信扫描上方二维码完成支付</p>
+                <p>支付成功后，系统将自动激活您的正式版</p>
+            </div>
+            
+            <div class="payment-status pending" id="paymentStatus">
+                等待支付...
+            </div>
+            
+            <div class="activate-section">
+                <p>已完成支付？请输入订单号激活：</p>
+                <input type="text" class="activate-input" id="orderId" placeholder="输入订单号">
+                <button class="activate-btn" id="activateBtn">立即激活</button>
+            </div>
+            
+            <div class="order-history" id="orderHistory">
+                <h4>支付历史记录</h4>
+                <div id="ordersList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="save-status" id="saveStatus">
+        <i class="fas fa-check-circle"></i> 数据已保存！
+    </div>
+          
+    <!-- 安装按钮 -->
+    <button id="installBtn">
+        <i class="fas fa-download"></i> 安装应用
+    </button>
+
+    <!-- 二维码分享模态框 -->
+    <div class="modal" id="shareModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeShareModal">&times;</span>
+            <h3 class="modal-title">分享学习平台</h3>
+            <div class="modal-body">
+                <p>扫描下方二维码分享给朋友</p>
+                <div id="shareQrcode" style="display: flex; justify-content: center; margin: 20px 0;"></div>
+                <p class="trial-info">分享给3位好友可额外获得3天试用期</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="knowledgeModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">&times;</span>
+            <h3 class="modal-title" id="modalTitle">常识点标题</h3>
+            <div class="modal-body" id="modalContent">
+                <!-- 内容将通过JavaScript动态填充 -->
+            </div>
+            <div class="mobile-nav">
+                <button class="nav-btn prev" id="prevKp">
+                    <i class="fas fa-arrow-left"></i> 上一个
+                </button>
+                <button class="nav-btn next" id="nextKp">
+                    下一个 <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" id="closeModalBtn">
+                    <i class="fas fa-times"></i> 关闭
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-book-open"></i>
+                <h1>中国文化常识学习平台 <span class="version-badge">v1.3</span></h1>
+            </div>
+            
+            <div class="header-actions">
+                <button class="action-btn" id="shareBtn">
+                    <i class="fas fa-share-alt"></i>
+                </button>
+                <button class="action-btn premium" id="premiumBtn">
+                    <i class="fas fa-crown"></i>
+                </button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchInput" placeholder="搜索常识点...">
+                <button class="search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                </button>
+                <div class="search-results" id="searchResults">
+                    <!-- 搜索结果将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="sectionCount">10</div>
+                    <div class="stat-label">知识板块</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="topicCount">54</div>
+                    <div class="stat-label">学习主题</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="knowledgeCount">1,000+</div>
+                    <div class="stat-label">文化常识点</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="data-tip">
+            <h4>数据迁移说明</h4>
+            <p>请在电脑上导出数据，然后将JSON文件发送到手机导入</p>
+        </div>
+        
+        <div class="data-actions">
+            <button class="data-btn import" id="importDataBtn">
+                <i class="fas fa-upload"></i> 导入数据
+            </button>
+            <button class="data-btn export" id="exportDataBtn">
+                <i class="fas fa-download"></i> 导出数据
+            </button>
+        </div>
+        
+        <aside class="sidebar">
+            <div class="section-title">
+                <h2>知识板块导航</h2>
+            </div>
+            <ul class="section-list" id="sectionList">
+                <!-- 知识板块将通过JavaScript动态生成 -->
+            </ul>
+        </aside>
+        
+        <main class="main-content">
+            <div class="content-header">
+                <div class="current-topic" id="currentTopic">朝代更替</div>
+            </div>
+            
+            <div class="knowledge-container">
+                <div class="knowledge-content">
+                    <div class="knowledge-list" id="knowledgeList">
+                        <!-- 常识点列表将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        // 应用数据模型
+        let appData = {
+            sections: [],
+            currentSectionId: null,
+            currentTopicId: null,
+            currentKpIndex: 0,
+            currentKps: [],
+            userData: {
+                isPremium: false,
+                trialStart: null,
+                trialDays: 7,
+                lastUpdateCheck: null,
+                orders: [] // 存储支付订单
+            }
+        };
+
+        // 初始化应用数据
+        function initAppData() {
+            const savedData = localStorage.getItem('chineseCulturePlatform');
+            const savedUserData = localStorage.getItem('chineseCultureUserData');
+            
+            if (savedUserData) {
+                try {
+                    appData.userData = JSON.parse(savedUserData);
+                } catch (e) {
+                    console.error('用户数据解析错误', e);
+                }
+            }
+            
+            // 初始化试用期
+            if (!appData.userData.trialStart) {
+                appData.userData.trialStart = new Date().toISOString();
+                saveUserData();
+            }
+            
+            // 检查试用期是否结束
+            checkTrialStatus();
+            
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    const sections = parsedData.sections || parsedData;
+                    
+                    sections.forEach(section => {
+                        section.topics.forEach(topic => {
+                            topic.knowledgePoints.forEach(kp => {
+                                if (kp.media && !Array.isArray(kp.media)) {
+                                    kp.media = kp.media.content ? [kp.media] : [];
+                                } else if (!kp.media) {
+                                    kp.media = [];
+                                }
+                            });
+                        });
+                    });
+                    
+                    appData.sections = sections;
+                    console.log('已加载本地存储的数据');
+                } catch (e) {
+                    console.error('数据解析错误，使用默认数据', e);
+                    loadDefaultData();
+                }
+            } else {
+                loadDefaultData();
+            }
+            
+            // 设置默认选中的板块和主题
+            if (appData.sections.length > 0) {
+                appData.currentSectionId = appData.sections[0].id;
+                if (appData.sections[0].topics.length > 0) {
+                    appData.currentTopicId = appData.sections[0].topics[0].id;
+                }
+            }
+            
+            updateStatistics();
+            renderOrderHistory();
+        }
+        
+        // 加载默认数据
+        function loadDefaultData() {
+            appData.sections = [
+                {
+                    id: 'section-1',
+                    name: '历史常识',
+                    icon: 'landmark',
+                    topics: [
+                        {
+                            id: 'topic-1-1',
+                            name: '朝代更替',
+                            knowledgePoints: [
+                                {
+                                    id: 'kp-1',
+                                    title: '分封制',
+                                    content: '分封制是西周时期重要的政治制度，周天子将土地和人民分封给同姓宗族、功臣和先代贵族，建立诸侯国。诸侯需向周天子进贡、述职，服从调兵。',
+                                    media: [
+                                        { type: 'image', content: 'https://via.placeholder.com/300x200?text=分封制示意图', alt: '分封制示意图' }
+                                    ]
+                                },
+                                {
+                                    id: 'kp-2',
+                                    title: '春秋五霸',
+                                    content: '春秋时期先后称霸的五个诸侯：齐桓公、宋襄公、晋文公、秦穆公、楚庄王。另一种说法是：齐桓公、晋文公、楚庄王、吴王阖闾、越王勾践。',
+                                    media: [
+                                        { type: 'video', content: 'https://www.youtube.com/embed/example1', alt: '春秋五霸介绍' }
+                                    ]
+                                },
+                                {
+                                    id: 'kp-3',
+                                    title: '战国七雄',
+                                    content: '战国时期的七个主要诸侯国：齐、楚、燕、韩、赵、魏、秦。各国之间战争频繁，最终由秦国统一六国。',
+                                    media: []
+                                }
+                            ]
+                        },
+                        {
+                            id: 'topic-1-2',
+                            name: '历史事件',
+                            knowledgePoints: [
+                                {
+                                    id: 'kp-4',
+                                    title: '焚书坑儒',
+                                    content: '秦始皇为加强思想控制，下令焚烧《秦记》以外的列国史记，以及民间收藏的《诗》、《书》等书籍，后又将四百六十多名方士和儒生坑杀在咸阳。',
+                                    media: [
+                                        { type: 'image', content: 'https://via.placeholder.com/300x200?text=焚书坑儒画作', alt: '焚书坑儒画作' }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'section-2',
+                    name: '文学常识',
+                    icon: 'book',
+                    topics: [
+                        {
+                            id: 'topic-2-1',
+                            name: '典籍名著',
+                            knowledgePoints: [
+                                {
+                                    id: 'kp-5',
+                                    title: '四书五经',
+                                    content: '四书指《大学》、《中庸》、《论语》、《孟子》；五经指《诗经》、《尚书》、《礼记》、《周易》、《春秋》。',
+                                    media: [
+                                        { type: 'image', content: 'https://via.placeholder.com/300x200?text=四书五经封面', alt: '四书五经封面' }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            id: 'topic-2-2',
+                            name: '诗词歌赋',
+                            knowledgePoints: [
+                                {
+                                    id: 'kp-6',
+                                    title: '唐诗四大家',
+                                    content: '李白、杜甫、白居易、王维并称唐代四大诗人。李白被称为"诗仙"，杜甫被称为"诗圣"，白居易被称为"诗魔"，王维被称为"诗佛"。',
+                                    media: []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'section-3',
+                    name: '艺术常识',
+                    icon: 'palette',
+                    topics: [
+                        {
+                            id: 'topic-3-1',
+                            name: '书法艺术',
+                            knowledgePoints: [
+                                {
+                                    id: 'kp-7',
+                                    title: '楷书四大家',
+                                    content: '欧阳询（欧体）、颜真卿（颜体）、柳公权（柳体）、赵孟頫（赵体）并称楷书四大家。',
+                                    media: [
+                                        { type: 'image', content: 'https://via.placeholder.com/300x200?text=楷书四大家作品', alt: '楷书四大家作品' }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ];
+            
+            console.log('使用初始数据');
+        }
+
+        // 保存用户数据
+        function saveUserData() {
+            localStorage.setItem('chineseCultureUserData', JSON.stringify(appData.userData));
+        }
+
+        // 保存应用数据
+        function saveData() {
+            localStorage.setItem('chineseCulturePlatform', JSON.stringify(appData.sections));
+            
+            const saveStatus = document.getElementById('saveStatus');
+            saveStatus.style.display = 'block';
+            setTimeout(() => {
+                saveStatus.style.display = 'none';
+            }, 2000);
+        }
+
+        // 更新统计信息
+        function updateStatistics() {
+            let sectionCount = appData.sections.length;
+            let topicCount = 0;
+            let knowledgeCount = 0;
+            
+            appData.sections.forEach(section => {
+                topicCount += section.topics.length;
+                section.topics.forEach(topic => {
+                    knowledgeCount += topic.knowledgePoints.length;
+                });
+            });
+            
+            document.getElementById('sectionCount').textContent = sectionCount;
+            document.getElementById('topicCount').textContent = topicCount;
+            document.getElementById('knowledgeCount').textContent = knowledgeCount.toLocaleString() + '+';
+        }
+
+        // 渲染侧边栏
+        function renderSidebar() {
+            const sectionList = document.getElementById('sectionList');
+            sectionList.innerHTML = '';
+            
+            appData.sections.forEach(section => {
+                const isActive = section.id === appData.currentSectionId;
+                
+                const sectionItem = document.createElement('li');
+                sectionItem.className = `section-item ${isActive ? 'active' : ''}`;
+                sectionItem.innerHTML = `
+                    <div class="section-header" data-section-id="${section.id}">
+                        <div class="section-name">
+                            <i class="fas fa-${section.icon} section-icon"></i>
+                            <span>${section.name}</span>
+                        </div>
+                        <i class="fas fa-chevron-${isActive ? 'up' : 'down'}"></i>
+                    </div>
+                    <ul class="topic-list" style="display: ${isActive ? 'block' : 'none'}">
+                        ${section.topics.map(topic => `
+                            <li class="topic-item ${topic.id === appData.currentTopicId ? 'active' : ''}" 
+                                data-topic-id="${topic.id}" 
+                                data-section-id="${section.id}">
+                                <span>${topic.name}</span>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                
+                sectionList.appendChild(sectionItem);
+            });
+            
+            const currentTopic = findCurrentTopic();
+            if (currentTopic) {
+                document.getElementById('currentTopic').textContent = currentTopic.name;
+            }
+            
+            bindSidebarEvents();
+        }
+
+        // 渲染知识点列表
+        function renderKnowledgeList() {
+            const knowledgeList = document.getElementById('knowledgeList');
+            knowledgeList.innerHTML = '';
+            
+            const currentTopic = findCurrentTopic();
+            if (!currentTopic) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                emptyState.innerHTML = `
+                    <i class="fas fa-book-open"></i>
+                    <h3>暂无常识点</h3>
+                    <p>请选择其他主题</p>
+                `;
+                knowledgeList.appendChild(emptyState);
+                return;
+            }
+            
+            if (currentTopic.knowledgePoints.length === 0) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                emptyState.innerHTML = `
+                    <i class="fas fa-book-open"></i>
+                    <h3>暂无常识点</h3>
+                    <p>该主题下没有常识点</p>
+                `;
+                knowledgeList.appendChild(emptyState);
+            } else {
+                appData.currentKps = currentTopic.knowledgePoints;
+                
+                currentTopic.knowledgePoints.forEach((kp, index) => {
+                    const mediaCount = kp.media ? kp.media.length : 0;
+                    const mediaBadge = mediaCount > 0 ? 
+                        `<span class="media-badge">${mediaCount}个媒体资源</span>` : '';
+                    
+                    const item = document.createElement('div');
+                    item.className = 'knowledge-item';
+                    item.setAttribute('data-kp-id', kp.id);
+                    item.setAttribute('data-kp-index', index);
+                    item.innerHTML = `
+                        <div>
+                            <div class="knowledge-title">${kp.title}</div>
+                            ${mediaBadge}
+                        </div>
+                    `;
+                    knowledgeList.appendChild(item);
+                });
+            }
+            
+            bindKnowledgeListEvents();
+        }
+
+        // 查找当前主题
+        function findCurrentTopic() {
+            for (const section of appData.sections) {
+                if (section.id === appData.currentSectionId) {
+                    for (const topic of section.topics) {
+                        if (topic.id === appData.currentTopicId) {
+                            return topic;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        // 查找当前知识点
+        function findCurrentKnowledgePoint(kpId) {
+            const currentTopic = findCurrentTopic();
+            if (currentTopic) {
+                return currentTopic.knowledgePoints.find(kp => kp.id === kpId);
+            }
+            return null;
+        }
+
+        // 绑定侧边栏事件
+        function bindSidebarEvents() {
+            document.querySelectorAll('.section-header').forEach(header => {
+                header.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section-id');
+                    
+                    if (appData.currentSectionId === sectionId) {
+                        appData.currentSectionId = null;
+                        appData.currentTopicId = null;
+                    } else {
+                        appData.currentSectionId = sectionId;
+                        
+                        const section = appData.sections.find(s => s.id === sectionId);
+                        if (section && section.topics.length > 0) {
+                            appData.currentTopicId = section.topics[0].id;
+                        } else {
+                            appData.currentTopicId = null;
+                        }
+                    }
+                    
+                    saveData();
+                    renderSidebar();
+                    renderKnowledgeList();
+                });
+            });
+            
+            document.querySelectorAll('.topic-item').forEach(topic => {
+                topic.addEventListener('click', function() {
+                    const topicId = this.getAttribute('data-topic-id');
+                    const sectionId = this.getAttribute('data-section-id');
+                    
+                    appData.currentSectionId = sectionId;
+                    appData.currentTopicId = topicId;
+                    
+                    saveData();
+                    renderSidebar();
+                    renderKnowledgeList();
+                });
+            });
+        }
+        
+        // 绑定知识点列表事件
+        function bindKnowledgeListEvents() {
+            document.querySelectorAll('.knowledge-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const kpId = this.getAttribute('data-kp-id');
+                    const index = parseInt(this.getAttribute('data-kp-index'));
+                    appData.currentKpIndex = index;
+                    showKnowledgeDetail(kpId);
+                });
+            });
+        }
+        
+        // 显示知识点详情
+        function showKnowledgeDetail(kpId) {
+            const kp = findCurrentKnowledgePoint(kpId);
+            if (!kp) return;
+            
+            document.getElementById('modalTitle').textContent = kp.title;
+            const modalContent = document.getElementById('modalContent');
+            
+            // 处理内容段落
+            let contentHtml = '';
+            const paragraphs = kp.content.split(/\r?\n/)
+                 .map(p => p.trim())
+                 .filter(p => p.length > 0);
+
+            paragraphs.forEach(para => {
+                 para = para.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                 contentHtml += `<p>${para}</p>`;
+            });
+              
+            // 添加媒体内容
+            if (kp.media && kp.media.length > 0) {
+                contentHtml += '<div class="media-grid">';
+                
+                kp.media.forEach(media => {
+                    if (media.type === 'image') {
+                        contentHtml += `
+                            <div class="media-item">
+                                <img src="${media.content}" alt="${media.alt || kp.title}">
+                                <div class="media-caption">${media.alt || ''}</div>
+                            </div>
+                        `;
+                    } else if (media.type === 'video') {
+                        contentHtml += `
+                            <div class="media-item">
+                                <iframe src="${media.content}" allowfullscreen></iframe>
+                                <div class="media-caption">${media.alt || ''}</div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                contentHtml += '</div>';
+            }
+            
+            modalContent.innerHTML = contentHtml;
+            
+            document.getElementById('knowledgeModal').style.display = 'flex';
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('knowledgeModal').style.display = 'none';
+        }
+        
+        // 知识点导航
+        function navigateKp(direction) {
+            if (appData.currentKps.length === 0) return;
+            
+            if (direction === 'prev') {
+                appData.currentKpIndex = (appData.currentKpIndex - 1 + appData.currentKps.length) % appData.currentKps.length;
+            } else {
+                appData.currentKpIndex = (appData.currentKpIndex + 1) % appData.currentKps.length;
+            }
+            
+            const kp = appData.currentKps[appData.currentKpIndex];
+            showKnowledgeDetail(kp.id);
+        }
+        
+        // 导出数据
+        function exportData() {
+            const data = JSON.stringify(appData.sections, null, 2);
+            const blob = new Blob([data], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `中国文化常识平台数据_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+    
+            alert('数据已导出为JSON文件！');
+        }
+        
+        // 导入数据
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            
+            input.onchange = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const content = e.target.result;
+                        const data = JSON.parse(content);
+                        
+                        if (!data || !Array.isArray(data)) {
+                            throw new Error('无效的数据格式');
+                        }
+                        
+                        if (confirm('导入数据将覆盖当前所有数据，是否继续？')) {
+                            appData.sections = data;
+                            saveData();
+                            
+                            if (appData.sections.length > 0) {
+                                appData.currentSectionId = appData.sections[0].id;
+                                if (appData.sections[0].topics.length > 0) {
+                                    appData.currentTopicId = appData.sections[0].topics[0].id;
+                                }
+                            }
+                            
+                            renderSidebar();
+                            renderKnowledgeList();
+                            updateStatistics();
+                            
+                            alert('数据导入成功！');
+                        }
+                    } catch (error) {
+                        alert('导入失败：' + error.message);
+                    }
+                };
+                
+                reader.readAsText(file);
+            };
+            
+            input.click();
+        }
+
+        // 初始化页面
+        function initPage() {
+            initAppData();
+            renderSidebar();
+            renderKnowledgeList();
+            initPWA();
+            bindGlobalEvents();
+            
+            // 检查更新
+            checkForUpdates();
+        }
+        
+        // 绑定全局事件
+        function bindGlobalEvents() {
+            // 关闭模态框
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            
+            // 搜索功能
+            document.getElementById('searchBtn').addEventListener('click', performSearch);
+            document.getElementById('searchInput').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            
+            // 知识点导航
+            document.getElementById('prevKp').addEventListener('click', () => navigateKp('prev'));
+            document.getElementById('nextKp').addEventListener('click', () => navigateKp('next'));
+            
+            // 点击模态框外部关闭
+            document.getElementById('knowledgeModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // 数据导入导出
+            document.getElementById('importDataBtn').addEventListener('click', importData);
+            document.getElementById('exportDataBtn').addEventListener('click', exportData);
+            
+            // 分享按钮
+            document.getElementById('shareBtn').addEventListener('click', showShareModal);
+            document.getElementById('closeShareModal').addEventListener('click', closeShareModal);
+            document.getElementById('shareModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeShareModal();
+                }
+            });
+            
+            // 付费功能
+            document.getElementById('premiumBtn').addEventListener('click', showPaywall);
+            document.getElementById('paywall').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closePaywall();
+                }
+            });
+            
+            // 支付方式切换
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.payment-option').forEach(opt => {
+                        opt.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    const paymentType = this.getAttribute('data-payment');
+                    updatePaymentQrcode(paymentType);
+                    
+                    // 模拟支付流程开始
+                    startPaymentProcess(paymentType);
+                });
+            });
+            
+            // 激活按钮
+            document.getElementById('activateBtn').addEventListener('click', activatePremium);
+            
+            // 更新按钮
+            document.getElementById('refreshBtn').addEventListener('click', function() {
+                location.reload();
+            });
+        }
+        
+        // 执行搜索
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (!searchTerm) {
+                resultsContainer.classList.remove('active');
+                return;
+            }
+            
+            const results = [];
+            
+            appData.sections.forEach(section => {
+                section.topics.forEach(topic => {
+                    topic.knowledgePoints.forEach(kp => {
+                        const titleMatch = kp.title.toLowerCase().includes(searchTerm);
+                        const contentMatch = kp.content.toLowerCase().includes(searchTerm);
+                        
+                        if (titleMatch || contentMatch) {
+                            results.push({
+                                sectionId: section.id,
+                                sectionName: section.name,
+                                topicId: topic.id,
+                                topicName: topic.name,
+                                kp: kp
+                            });
+                        }
+                    });
+                });
+            });
+            
+            if (results.length > 0) {
+                resultsContainer.innerHTML = '';
+                
+                results.forEach(result => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.innerHTML = `
+                        <div class="result-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="result-content">
+                            <div class="result-title">${result.kp.title}</div>
+                            <div class="result-desc">${result.kp.content.substring(0, 80)}${result.kp.content.length > 80 ? '...' : ''}</div>
+                            <div class="result-tag">${result.sectionName} / ${result.topicName}</div>
+                        </div>
+                    `;
+                    
+                    resultItem.addEventListener('click', () => {
+                        appData.currentSectionId = result.sectionId;
+                        appData.currentTopicId = result.topicId;
+                        renderSidebar();
+                        renderKnowledgeList();
+                        
+                        setTimeout(() => {
+                            const item = document.querySelector(`.knowledge-item[data-kp-id="${result.kp.id}"]`);
+                            if (item) {
+                                item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                item.style.animation = 'highlight 1.5s ease';
+                                setTimeout(() => item.style.animation = '', 1500);
+                            }
+                            
+                            resultsContainer.classList.remove('active');
+                            document.getElementById('searchInput').value = '';
+                        }, 100);
+                    });
+                    
+                    resultsContainer.appendChild(resultItem);
+                });
+                
+                resultsContainer.classList.add('active');
+            } else {
+                resultsContainer.innerHTML = '<div class="no-results"><i class="fas fa-search"></i><p>未找到匹配的常识点</p></div>';
+                resultsContainer.classList.add('active');
+            }
+        }
+        
+        // 高亮动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes highlight {
+                0% { background-color: #e3f2fd; }
+                50% { background-color: #ffeb3b; }
+                100% { background-color: #e3f2fd; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // 显示分享模态框
+        function showShareModal() {
+            const shareModal = document.getElementById('shareModal');
+            const shareQrcode = document.getElementById('shareQrcode');
+            
+            shareQrcode.innerHTML = '';
+            const qrcode = new QRCode(shareQrcode, {
+                text: window.location.href,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            shareModal.style.display = 'flex';
+        }
+        
+        // 关闭分享模态框
+        function closeShareModal() {
+            document.getElementById('shareModal').style.display = 'none';
+        }
+        
+        // 检查试用状态
+        function checkTrialStatus() {
+            const trialStart = new Date(appData.userData.trialStart);
+            const now = new Date();
+            const diffTime = Math.abs(now - trialStart);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const remainingDays = appData.userData.trialDays - diffDays;
+            
+            if (appData.userData.isPremium) {
+                return;
+            }
+            
+            if (remainingDays <= 0) {
+                // 试用期结束，显示付费墙
+                document.getElementById('trialInfo').style.display = 'none';
+                document.getElementById('paywall').style.display = 'flex';
+            } else {
+                // 更新试用倒计时
+                document.getElementById('trialCountdown').textContent = `${remainingDays}天`;
+            }
+        }
+        
+        // 显示付费墙
+        function showPaywall() {
+            document.getElementById('paywall').style.display = 'flex';
+        }
+        
+        // 关闭付费墙
+        function closePaywall() {
+            document.getElementById('paywall').style.display = 'none';
+        }
+        
+        // 更新支付二维码
+        function updatePaymentQrcode(paymentType) {
+            const qrcodeContainer = document.getElementById('paymentQrcode');
+            const instruction = document.querySelector('.payment-instruction p:first-child');
+            
+            if (paymentType === 'wechat') {
+                qrcodeContainer.innerHTML = '<img src="https://via.placeholder.com/180x180?text=微信收款码" alt="微信收款码">';
+                instruction.textContent = '请使用微信扫描上方二维码完成支付';
+            } else if (paymentType === 'alipay') {
+                qrcodeContainer.innerHTML = '<img src="https://via.placeholder.com/180x180?text=支付宝收款码" alt="支付宝收款码">';
+                instruction.textContent = '请使用支付宝扫描上方二维码完成支付';
+            }
+        }
+        
+        // 开始支付流程
+        function startPaymentProcess(paymentType) {
+            const paymentStatus = document.getElementById('paymentStatus');
+            paymentStatus.textContent = "等待支付...";
+            paymentStatus.className = "payment-status pending";
+            
+            // 生成唯一订单号
+            const orderId = 'ORD' + Date.now() + Math.floor(Math.random() * 1000);
+            
+            // 模拟支付处理
+            setTimeout(() => {
+                // 模拟支付成功
+                paymentStatus.textContent = "支付成功！正在激活账户...";
+                paymentStatus.className = "payment-status success";
+                
+                // 创建订单记录
+                const newOrder = {
+                    id: orderId,
+                    date: new Date().toISOString(),
+                    amount: 30,
+                    paymentType: paymentType,
+                    status: 'paid'
+                };
+                
+                // 添加到订单历史
+                appData.userData.orders.push(newOrder);
+                saveUserData();
+                
+                // 激活账户
+                setTimeout(() => {
+                    appData.userData.isPremium = true;
+                    saveUserData();
+                    paymentStatus.textContent = "账户已成功激活！";
+                    
+                    // 关闭支付墙
+                    setTimeout(() => {
+                        closePaywall();
+                        alert('恭喜！您已成为正式版用户，享受全部功能！');
+                    }, 2000);
+                    
+                    // 更新订单历史显示
+                    renderOrderHistory();
+                }, 1500);
+            }, 3000);
+        }
+        
+        // 渲染订单历史
+        function renderOrderHistory() {
+            const ordersList = document.getElementById('ordersList');
+            ordersList.innerHTML = '';
+            
+            if (appData.userData.orders.length === 0) {
+                ordersList.innerHTML = '<p>暂无支付记录</p>';
+                return;
+            }
+            
+            // 只显示最近的5条记录
+            const recentOrders = [...appData.userData.orders].reverse().slice(0, 5);
+            
+            recentOrders.forEach(order => {
+                const orderDate = new Date(order.date);
+                const formattedDate = `${orderDate.getFullYear()}-${(orderDate.getMonth()+1).toString().padStart(2, '0')}-${orderDate.getDate().toString().padStart(2, '0')}`;
+                
+                const orderItem = document.createElement('div');
+                orderItem.className = 'order-item';
+                orderItem.innerHTML = `
+                    <div>
+                        <div class="order-id">${order.id}</div>
+                        <div>${formattedDate} - ${order.paymentType === 'wechat' ? '微信支付' : '支付宝'}</div>
+                    </div>
+                    <div class="order-status ${order.status === 'paid' ? 'status-paid' : 'status-pending'}">
+                        ${order.status === 'paid' ? '已支付' : '待支付'}
+                    </div>
+                `;
+                
+                ordersList.appendChild(orderItem);
+            });
+        }
+        
+        // 激活正式版
+        function activatePremium() {
+            const orderId = document.getElementById('orderId').value.trim();
+            
+            if (!orderId) {
+                alert('请输入订单号');
+                return;
+            }
+            
+            // 在实际应用中，这里应该向服务器验证订单号
+            // 这里简化为任何非空字符串都视为激活成功
+            const paymentStatus = document.getElementById('paymentStatus');
+            paymentStatus.textContent = "正在验证订单...";
+            paymentStatus.className = "payment-status pending";
+            
+            setTimeout(() => {
+                // 模拟订单验证成功
+                paymentStatus.textContent = "订单验证成功！正在激活账户...";
+                paymentStatus.className = "payment-status success";
+                
+                // 创建订单记录
+                const newOrder = {
+                    id: orderId,
+                    date: new Date().toISOString(),
+                    amount: 30,
+                    paymentType: 'manual',
+                    status: 'paid'
+                };
+                
+                // 添加到订单历史
+                appData.userData.orders.push(newOrder);
+                
+                // 激活账户
+                setTimeout(() => {
+                    appData.userData.isPremium = true;
+                    saveUserData();
+                    paymentStatus.textContent = "账户已成功激活！";
+                    
+                    // 关闭支付墙
+                    setTimeout(() => {
+                        closePaywall();
+                        alert('恭喜！您已成为正式版用户，享受全部功能！');
+                    }, 2000);
+                    
+                    // 更新订单历史显示
+                    renderOrderHistory();
+                }, 1500);
+            }, 1500);
+        }
+        
+        // 检查更新
+        function checkForUpdates() {
+            const now = new Date();
+            const lastCheck = appData.userData.lastUpdateCheck ? new Date(appData.userData.lastUpdateCheck) : null;
+            
+            // 每天检查一次更新
+            if (!lastCheck || (now - lastCheck) > 24 * 60 * 60 * 1000) {
+                // 模拟检查更新
+                const hasUpdate = Math.random() > 0.5;
+                
+                if (hasUpdate) {
+                    // 显示更新提示
+                    const updateBanner = document.getElementById('updateBanner');
+                    updateBanner.classList.add('show');
+                }
+                
+                // 更新最后检查时间
+                appData.userData.lastUpdateCheck = now.toISOString();
+                saveUserData();
+            }
+        }
+        
+        // 初始化PWA功能
+        function initPWA() {
+            let deferredPrompt;
+            const installBtn = document.getElementById('installBtn');
+            
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                installBtn.style.display = 'block';
+                
+                installBtn.addEventListener('click', async () => {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        installBtn.style.display = 'none';
+                    }
+                });
+            });
+            
+            window.addEventListener('appinstalled', () => {
+                installBtn.style.display = 'none';
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>
